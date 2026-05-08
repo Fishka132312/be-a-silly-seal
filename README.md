@@ -1,4 +1,4 @@
-Make sure the red zone outlines the area where the mini-game appears. If it doesn’t, change:
+Make sure the red zone outlines the area where the mini-game appears. If it doesn’t, use "Screen Region Check" then change:
 
 left := 668
 top := 767
