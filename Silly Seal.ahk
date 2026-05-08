@@ -1,4 +1,4 @@
-﻿#NoEnv
+#NoEnv
 #SingleInstance Force
 #Persistent
 SendMode Input
@@ -71,7 +71,7 @@ lastRestart := 0
 Gui, 1:+AlwaysOnTop -Caption +ToolWindow
 Gui, 1:Color, 1E1E1E
 Gui, 1:Font, cFFFFFF s10 Bold, Segoe UI
-Gui, 1:Add, Text, vStatusText w420 h32 Center, OFF
+Gui, 1:Add, Text, vStatusText w420 h32 Center, Script Disabled (F1) 
 Gui, 1:Show, x20 y20 NoActivate
 
 ; =========================================================
@@ -98,7 +98,7 @@ if (running)
 {
     Gosub, ResetState
 
-    GuiControl,, StatusText, СКРИПТ ВКЛЮЧЕН
+    GuiControl,, StatusText, Script On (F1)
 
     SetTimer, MainLoop, %loopDelay%
 }
@@ -108,7 +108,7 @@ else
 
     Gosub, ResetState
 
-    GuiControl,, StatusText, СКРИПТ ВЫКЛЮЧЕН
+    GuiControl,, StatusText, Script Disabled (F1) 
 }
 
 return
@@ -240,7 +240,7 @@ else
     ; снова запускаем рыбалку
     if ((A_TickCount - lastRestart) > restartDelay)
     {
-        GuiControl,, StatusText, ЗАПУСК РЫБАЛКИ
+        GuiControl,, StatusText, Looking For A Fish...
 
         Gosub, StartFishing
     }
@@ -301,7 +301,7 @@ if ((A_TickCount - gameStartTime) > gameTimeout)
             holding := false
         }
 
-        GuiControl,, StatusText, ИГРА ЗАКОНЧИЛАСЬ
+        GuiControl,, StatusText, Game Ended
 
         Sleep 200
 
@@ -329,7 +329,7 @@ if (redFound)
         Sleep 15
     }
 
-    GuiControl,, StatusText, КРАСНЫЙ - КЛИК
+    GuiControl,, StatusText, Red (Click)
 
     Click
     Sleep %clickDelay%
@@ -345,7 +345,7 @@ if (redFound)
 
 if (blueFound)
 {
-    GuiControl,, StatusText, СИНИЙ - HOLD
+    GuiControl,, StatusText, Blue (Hold)
 
     if ((A_TickCount - lastRed) < 80)
         Sleep 20
