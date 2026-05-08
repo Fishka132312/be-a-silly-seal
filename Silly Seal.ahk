@@ -46,7 +46,7 @@ loopDelay := 5
 promptKey := "e"
 
 ; сколько ждать перед проверкой окончания игры
-gameTimeout := 10000
+gameTimeout := 5000
 
 ; через сколько снова прожимать E
 restartDelay := 1200
@@ -94,25 +94,28 @@ F1::
 
 running := !running
 
-if (running)
-{
-    Gosub, ResetState
-
-    GuiControl,, StatusText, Script On (F1)
-
-    SetTimer, MainLoop, %loopDelay%
-}
-else
+if (!running)
 {
     SetTimer, MainLoop, Off
 
-    Gosub, ResetState
+    ; 🔴 ЖЁСТКИЙ СТОП ВСЕХ СОСТОЯНИЙ
+    SendInput {LButton Up}
 
-    GuiControl,, StatusText, Script Disabled (F1) 
+    holding := false
+    gameActive := false
+
+    GuiControl,, StatusText, Script Disabled (F1)
+
+    return
+}
+else
+{
+    Gosub, ResetState
+    GuiControl,, StatusText, Script On (F1)
+    SetTimer, MainLoop, %loopDelay%
 }
 
 return
-
 ; =========================================================
 ; RESET
 ; =========================================================
@@ -136,6 +139,8 @@ return
 ; =========================================================
 
 StartFishing:
+if (!running)
+    return
 
 ; нажимаем prompt E
 SendInput {%promptKey%}
@@ -160,7 +165,11 @@ return
 MainLoop:
 
 if (!running)
+{
+    SendInput {LButton Up}
+    holding := false
     return
+}
 
 blueFound := false
 redFound := false
@@ -239,11 +248,13 @@ else
 
     ; снова запускаем рыбалку
     if ((A_TickCount - lastRestart) > restartDelay)
-    {
-        GuiControl,, StatusText, Looking For A Fish...
+{
+    if (!running)
+        return
 
-        Gosub, StartFishing
-    }
+    GuiControl,, StatusText, Looking For A Fish...
+    Gosub, StartFishing
+}
 
     return
 }
